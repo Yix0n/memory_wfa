@@ -2,19 +2,19 @@
 
 public class Memory
 {
-    public static (string, string)[] CardList = new[]
+    public static (string, string, string)[] CardList = new[]
     {
-        ("Name", "ImageData"),
-        ("Name", "ImageData"),
-        ("Name", "ImageData"),
-        ("Name", "ImageData"),
-        ("Name", "ImageData"),
-        ("Name", "ImageData"),
-        ("Name", "ImageData"),
-        ("Name", "ImageData"),
+        ("NameOne", "ImageOne", "ImageTwo"),
+        ("NameTwo", "ImageData", "ImageTwo"),
+        ("NameThree", "ImageData", "ImageTwo"),
+        ("NameFour", "ImageData", "ImageTwo"),
+        ("NameFive", "ImageData", "ImageTwo"),
+        ("NameSix", "ImageData", "ImageTwo"),
+        ("NameSeven", "ImageData", "ImageTwo"),
+        ("NameEight", "ImageData", "ImageTwo")
     };
     
-    Linear2DArray<Card> CardArray = new Linear2DArray<Card>(4, 4);
+    Linear2DArray<Card> CardArray = new (4, 4);
     public Memory() {}
 
     public void GenerateNew()
@@ -23,8 +23,8 @@ public class Memory
 
         foreach (var cardDetails in CardList)
         {
-            cardList.Add(Card.Build(cardDetails.Item1, cardDetails.Item2));
-            cardList.Add(Card.Build(cardDetails.Item1, cardDetails.Item2));
+            cardList.Add(Card.Build(cardDetails.Item1, cardDetails.Item2, cardDetails.Item3));
+            cardList.Add(Card.Build(cardDetails.Item1, cardDetails.Item2, cardDetails.Item3));
         }
 
         Random rng = new Random();
@@ -35,9 +35,7 @@ public class Memory
             {
                 n--;
                 int k = rng.Next(n + 1);
-                Card value = cardList[k];
-                cardList[k] = cardList[n];
-                cardList[n] = value;
+                (cardList[k], cardList[n]) = (cardList[n], cardList[k]);
             }
         }
 
@@ -54,17 +52,19 @@ public class Card
 {
     public bool IsDiscovered { get; set; }
     public string Name { get; set; }
-    public byte[] Image { get; set; }
+    public string ImageOne { get; set; }
+    public string ImageTwo { get; set; }
 
     private Card() {}
     
-    public static Card Build(string Name, string ImageRef)
+    public static Card Build(string Name, string ImageOne, string ImageTwo)
     {
         return new Card()
         {
             IsDiscovered = false,
             Name = Name,
-            Image = [], // ImageRef TODO
+            ImageOne = ImageOne, 
+            ImageTwo = ImageTwo,
         };
     }
 }
