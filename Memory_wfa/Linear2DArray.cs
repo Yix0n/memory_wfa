@@ -32,6 +32,12 @@ public class Linear2DArray<T>
         }
     }
 
+    public T this[int rawIndex]
+    {
+        get {  return _data[rawIndex]; }
+        set {  _data[rawIndex] = value; }
+    }
+
     private void ValidationConstraints(int x, int y)
     {
         if (x < 0 || x >= _width || y < 0 || y >= _height) throw new ArgumentOutOfRangeException("Invalid coordinates");
@@ -39,9 +45,14 @@ public class Linear2DArray<T>
 
     public void ApplyList(IEnumerable<T> list)
     {
-        if (!(list.Count() == _width * _height))
+        if (list.Count() != _width * _height)
         {
-            
+            throw new IndexOutOfRangeException("Given list is too long");
+        }
+
+        for (int i = 0; i < list.Count(); i++) 
+        {
+            _data[i] = list.ToArray()[i];
         }
     }
 }

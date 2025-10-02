@@ -2,69 +2,67 @@
 
 public class Memory
 {
-    public static (string, string, string)[] CardList = new[]
-    {
-        ("NameOne", "ImageOne", "ImageTwo"),
-        ("NameTwo", "ImageData", "ImageTwo"),
-        ("NameThree", "ImageData", "ImageTwo"),
-        ("NameFour", "ImageData", "ImageTwo"),
-        ("NameFive", "ImageData", "ImageTwo"),
-        ("NameSix", "ImageData", "ImageTwo"),
-        ("NameSeven", "ImageData", "ImageTwo"),
-        ("NameEight", "ImageData", "ImageTwo")
-    };
+    public static List<Match> matches = new List<Match> { 
     
-    Linear2DArray<Card> CardArray = new (4, 4);
+    };
+
+    Linear2DArray<Match> CardArray = new (4, 4);
+    private static Random rng = new Random();
     public Memory() {}
 
-    public void GenerateNew()
+    public void GenerateDeck()
     {
-        List<Card> cardList = new List<Card>();
+        List<Match> selected = new List<Match>();
+        HashSet<string> candidates = new HashSet<string>();
 
-        foreach (var cardDetails in CardList)
+        while (selected.Count < 8)
         {
-            cardList.Add(Card.Build(cardDetails.Item1, cardDetails.Item2, cardDetails.Item3));
-            cardList.Add(Card.Build(cardDetails.Item1, cardDetails.Item2, cardDetails.Item3));
+            Match candidate = GetRandomMatch();
+            if (candidates.Contains(candidate.Name)) continue;
+
+            selected.Add(candidate);
+            foreach (var match in candidate.ValidMatches) candidates.Add(match);
         }
 
-        Random rng = new Random();
+        List<Match> partners = new List<Match>();
 
+        foreach (var card in selected)
         {
-            int n = cardList.Count;
-            while (n > 1)
-            {
-                n--;
-                int k = rng.Next(n + 1);
-                (cardList[k], cardList[n]) = (cardList[n], cardList[k]);
-            }
+            Match partner = GetMatchFrom(card.ValidMatches, selected, partners);
+            partners.Add(partner);
         }
 
-        for (int i = 0; i < cardList.Count; i++)
-        {
-            int x = i / CardArray.Width;
-            int y = i  % CardArray.Width;
-            CardArray[x,y] = cardList[i];
-        }
+        var gameSet = selected.Concat(partners)
+            .OrderBy(x => rng.Next()).ToList();
+    }
+
+    private static Match GetRandomMatch()
+    {
+        return matches[rng.Next(matches.Count)];
+    }
+
+    private static Match GetMatchFrom(List<string> validNames, List<Match> selected, List<Match> partners)
+    {
+        var available = matches.Where(m => validNames.Contains(m.Name) &&
+                                           !selected.Contains(m) &&
+                                           !partners.Contains(m))
+                               .ToList();
+
+        if (available.Count == 0)
+            throw new InvalidOperationException("No Aviable Matches");
+
+        return available[rng.Next(available.Count)];
     }
 }
 
-public class Card
+public class Match
 {
-    public bool IsDiscovered { get; set; }
-    public string Name { get; set; }
-    public string ImageOne { get; set; }
-    public string ImageTwo { get; set; }
+    public string Name { get; set; } // np. "Trump"
+    public List<string> ValidMatches { get; set; } // np. "Epstein"
+    public Bitmap Image { get; set; } // Image from Resource
 
-    private Card() {}
-    
-    public static Card Build(string Name, string ImageOne, string ImageTwo)
+    public bool CanMatch(Match other)
     {
-        return new Card()
-        {
-            IsDiscovered = false,
-            Name = Name,
-            ImageOne = ImageOne, 
-            ImageTwo = ImageTwo,
-        };
+        return ValidMatches.Contains(other.Name);
     }
 }
