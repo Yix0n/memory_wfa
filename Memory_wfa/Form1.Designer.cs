@@ -408,7 +408,7 @@ partial class Form1
         reset.UseVisualStyleBackColor = false;
         reset.Click += reset_Click;
         // 
-        // Form1
+        // `
         // 
         AutoScaleDimensions = new SizeF(8F, 20F);
         AutoScaleMode = AutoScaleMode.Font;
