@@ -26,7 +26,7 @@ public partial class Form1 : Form
 
     private void Form1_Load(object sender, EventArgs e)
     {
-        timer = new ();
+        timer = new();
         timer.Interval = 1000;
         timer.Tick += TimerTick;
         timer.Start();
@@ -41,8 +41,8 @@ public partial class Form1 : Form
     private void reset_Click(object sender, EventArgs e)
     {
         _searchIndex = null;
-        foreach (Button button in buttons.Values) 
-        { 
+        foreach (Button button in buttons.Values)
+        {
             button.Enabled = true;
         }
         timeElapsed.Restart();

@@ -2,13 +2,14 @@
 
 public class Memory
 {
-    public static List<Match> matches = new List<Match> { 
-    
+    public static List<Match> matches = new List<Match>
+    {
+
     };
 
-    Linear2DArray<Match> CardArray = new (4, 4);
+    Linear2DArray<Match> CardArray = new(4, 4);
     private static Random rng = new Random();
-    public Memory() {}
+    public Memory() { }
 
     public void GenerateDeck()
     {
