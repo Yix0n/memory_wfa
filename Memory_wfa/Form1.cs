@@ -63,7 +63,6 @@ public partial class Form1 : Form
             _searchIndex = null;
             _openedIndex = null;
             _show = 0;
-            
         }
     }
 
@@ -73,6 +72,9 @@ public partial class Form1 : Form
         foreach (Button button in buttons.Values)
         {
             button.Enabled = true;
+            button.Image = Properties.Resources.unknown;
+            button.FlatStyle = FlatStyle.Standard;
+            button.FlatAppearance.BorderColor = Color.White;
         }
         
         Memory.GenerateDeck();
@@ -117,10 +119,12 @@ public partial class Form1 : Form
             Points += 5;
             text_points.Text = Points.ToString();
             clickedButton.Enabled = false;
-            buttons[_searchIndex.Value].Enabled = false;
+            clickedButton.FlatAppearance.BorderColor = Color.Green;
+            Button button_match2 = buttons[_searchIndex.Value];
+            button_match2.Enabled = false;
+            button_match2.FlatAppearance.BorderColor = Color.Green;
             _searchIndex = null;
             _openedIndex = null;
-            // TOOD: Can Match. Add point and update
 
             if (Points == 40)
             {
@@ -130,13 +134,12 @@ public partial class Form1 : Form
         }
         else
         {
+            Button button_match2 = buttons[_searchIndex.Value];
+            button_match2.FlatAppearance.BorderColor = Color.Red;
+            clickedButton.FlatAppearance.BorderColor = Color.Red;
+
             _openedIndex = index;
             showing = true;
         }
-    }
-
-    public void EndGame()
-    {
-        timeElapsed.Stop();
     }
 }

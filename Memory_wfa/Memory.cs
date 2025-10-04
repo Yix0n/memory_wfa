@@ -62,9 +62,14 @@ public static class Memory
         }
     }
 
-    public static Match GetMatch(int index)
+    private static Match GetStaticMatch(int index)
     {
         return matches[index];
+    }
+
+    public static Match GetMatch(int index)
+    {
+        return CardArray[index];
     }
 
     private static Match GetRandomMatch()
