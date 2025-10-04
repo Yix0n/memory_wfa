@@ -29,6 +29,13 @@ public static class Memory
     static Linear2DArray<Match> CardArray = new(4, 4);
     private static Random rng = new Random();
 
+    /***********************************************
+     * Nazwa Funkcji: GenerateDeck
+     * Opis Funkcji: Generuje losową talię kart do gry Match
+     * Parametry wejściowe: brak
+     * Wartość Zwracana: brak
+     * Autor: 2137
+     ************************************************/
     public static void GenerateDeck()
     {
         List<Match> selected = new List<Match>();
@@ -62,21 +69,55 @@ public static class Memory
         }
     }
 
+    /***********************************************
+     * Nazwa Funkcji: GetStaticMatch
+     * Opis Funkcji: Zwraca karte z Puli kart
+     * Parametry wejściowe:
+     *      - int index - numer karty w Puli
+     * Wartość Zwracana: Match - Karta z Puli
+     * Autor: 2137
+     ************************************************/
     private static Match GetStaticMatch(int index)
     {
         return matches[index];
     }
 
+    /***********************************************
+     * Nazwa Funkcji: Get Match
+     * Opis Funkcji: Zwraca karte z aktualnej talii
+     * Parametry wejściowe:
+     *      - int index - numer karty w aktualnej talii
+     * Wartość Zwracana: Match - Karta z aktualnej talii
+     * Autor: 2137
+     ************************************************/
     public static Match GetMatch(int index)
     {
         return CardArray[index];
     }
 
+        
+    /***********************************************
+     * Nazwa Funkcji: GetRandomMatch
+     * Opis Funkcji: Zwraca losową kartę z Puli kart
+     * Parametry wejściowe: brak
+     * Wartość Zwracana: Match - Losowa karta z Puli kart
+     * Autor: 2137
+     ************************************************/
     private static Match GetRandomMatch()
     {
         return matches[rng.Next(matches.Count)];
     }
 
+    /***********************************************
+     * Nazwa Funkcji: GetMatchFrom
+     * Opis Funkcji: Zwraca losową kartę z Puli kart, która może być dopasowana do jednej z podanych nazw
+     * Parametry wejściowe:
+     *      - List<string> validNames - Lista nazw kart, które mogą być dopasowane
+     *      - List<Match> selected - Lista już wybranych kart
+     *      - List<Match> partners - Lista już wybranych kart partnerskich
+     * Wartość Zwracana: Match - Losowa karta z Puli kart która pasuje
+     * Autor: 2137
+     ************************************************/
     private static Match GetMatchFrom(List<string> validNames, List<Match> selected, List<Match> partners)
     {
         var available = matches.Where(m => validNames.Contains(m.Name) &&
@@ -90,6 +131,14 @@ public static class Memory
         return available[rng.Next(available.Count)];
     }
 
+    /***********************************************
+     * Nazwa Funkcji: Shuffle
+     * Opis Funkcji: Tasuje liste
+     * Parametry wejściowe:
+     *      - IList<T> list - lista do potasowania
+     * Wartość Zwracana: brak
+     * Autor: 2137
+     ************************************************/
     private static void Shuffle<T>(IList<T> list)
     {
         int n = list.Count;
@@ -106,9 +155,9 @@ public static class Memory
 
 public class Match
 {
-    public string Name { get; set; } // np. "Trump"
-    public List<string> ValidMatches { get; set; } // np. "Epstein"
-    public Bitmap Image { get; set; } // Image from Resource
+    public string Name { get; set; }
+    public List<string> ValidMatches { get; set; }
+    public Bitmap Image { get; set; }
 
     public Match(string name,  List<string> validMatches, Bitmap image)
     {
@@ -117,13 +166,16 @@ public class Match
         Image = image;
     }
     
+    /***********************************************
+     * Nazwa Funkcji: CanMatch
+     * Opis Funkcji: Sprawdza czy dwie karty mogą być dopasowane
+     * Parametry wejściowe:
+     *      - Match other - druga karta do sprawdzenia
+     * Wartość Zwracana: bool - true jeśli karty mogą być dopasowane, false w przeciwnym wypadku
+     * Autor: 2137
+     ************************************************/
     public bool CanMatch(Match other)
     {
         return ValidMatches.Contains(other.Name);
-    }
-
-    public Match Copy()
-    {
-        return new Match(Name, ValidMatches, Image);
     }
 }
